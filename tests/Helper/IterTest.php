@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Jascha030\Iterable\Helper;
 
+use Generator;
+use Iterator;
 use PHPUnit\Framework\TestCase;
+use function dump;
+use function ob_get_clean;
 use function PHPUnit\Framework\assertEquals;
 
 /**
@@ -26,7 +30,7 @@ final class IterTest extends TestCase
         );
 
         assertEquals(
-            1          // Initial
+            1 // Initial
             + 1 + 2 + 3 // Values
             + 1 + 2,    // Keys
             $withKeys
@@ -49,5 +53,31 @@ final class IterTest extends TestCase
             + 1 + 2 + 3, // Values
             $withKeys
         );
+    }
+
+    public function testMakeRewindable(): void
+    {
+        $map = function (callable $function, iterable $iterable): Iterator {
+            foreach ($iterable as $k => $v) {
+                yield $k => $function($v);
+            }
+        };
+
+        $map    = Iter::makeRewindable($map);
+        $mapped = $map(static fn(int $v) => $v + 1, [1, 2, 3]);
+
+        [$first, $second] = 0;
+
+        foreach ($mapped as $value) {
+            $first += $value;
+        }
+
+        // Loop would throw: "Exception : Cannot traverse an already closed generator",
+        // without calling `Iter::makeRewindable()` on `$map` first.
+        foreach ($mapped as $value) {
+            $second += $value;
+        }
+
+        assertEquals($first, $second);
     }
 }
