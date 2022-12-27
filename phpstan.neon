@@ -1,8 +1,6 @@
 parameters:
-  # level: 5
-  level: 8
+  level: max
   paths:
     - src
-    # - app/public/wp-content/themes/socialbrothers
     - tests
 

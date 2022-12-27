@@ -16,7 +16,6 @@
 >
         <include>
             <directory suffix=".php">src</directory>
-            <!-- <directory suffix=".php">app/public/wp-content/themes/socialbrothers</directory> -->
         </include>
         <report>
             <clover outputFile=".var/cache/phpunit/cov.xml"/>
@@ -25,7 +24,6 @@
     </coverage>
     <testsuite name="main">
         <directory>tests</directory>
-        <!-- <directory>app/public/tests</directory> -->
     </testsuite>
     <logging/>
 </phpunit>
