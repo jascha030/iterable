@@ -1,0 +1,38 @@
+{
+    "name": "jascha030/iterable",
+    "description": "Utilities for working with iterators and generators.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jascha030\\Iterable\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jascha030\\Iterable\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jascha030",
+            "email": "contact@jaschavanaalst.nl"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "platform-check": false,
+        "platform": {
+            "php": "8.0.2"
+        },
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "require": {
+        "php": "~8.0||~8.1||~8.2"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "^6.0"
+    }
+}
