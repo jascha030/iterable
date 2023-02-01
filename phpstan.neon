@@ -13,5 +13,7 @@ parameters:
     - src
     - tests
   ignoreErrors:
-    - '#Method Jascha030\\Iterable\\Rewindable\\RewindableGenerator::getGenerator\(\) should return Generator but returns Generator\|null.#'
-    - '#Parameter \#1 \$callback of class PhpOption\\LazyOption constructor expects callable\(...mixed\): PhpOption\\Option<T>, Closure\(\): Generator given.#'
+    - "#^Method Jascha030\\\\Iterable\\\\Rewindable\\\\RewindableGenerator\\:\\:factory\\(\\) should return Generator but returns Generator\\|null\\.$#"
+    - "#^Method Jascha030\\\\Iterable\\\\Rewindable\\\\RewindableGenerator\\:\\:getGenerator\\(\\) should return PhpOption\\\\Option\\<Generator\\|null\\> but returns PhpOption\\\\Some\\<Generator\\>\\.$#"
+    - "#^Method Jascha030\\\\Iterable\\\\Rewindable\\\\RewindableGenerator\\:\\:getInner\\(\\) should return Generator but returns Generator\\|null\\.$#"
+
