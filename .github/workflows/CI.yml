@@ -6,13 +6,13 @@ on:
 
 name: CI
 
-permissions: 
+permissions:
   contents: read
-  
+
 jobs:
   code-style:
     name: Code style
-    
+
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +33,7 @@ jobs:
   validate:
       name: Validate
       runs-on: ubuntu-latest
-      
+
       steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -48,10 +48,10 @@ jobs:
 
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-interaction --no-ansi --no-progress
-        
+
       - name: Analyze with PHPStan
-        run: ./tools/composer run analyze
-        
+        run: ./vendor-bin/phpstan/vendor/bin/phpstan analyze -c phpstan.neon
+
   unit-tests:
     name: Unit Tests
 
@@ -106,6 +106,5 @@ jobs:
         run: ./tools/composer update --no-ansi --no-interaction --no-progress
 
       - name: Run tests with PHPUnit
-        run: ./phpunit --testsuite unit
+        run: ./tools/phpunit.phar -c phpunit.xml.dist
 
-      
