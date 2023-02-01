@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
     bootstrap="vendor/autoload.php"
-    backupGlobals="false"
-    cacheResult="false"
+    cacheResultFile=".var/cache/phpunit/phpunit.cache/test-results"
+    executionOrder="depends,defects"
+    forceCoversAnnotation="true"
+    beStrictAboutCoversAnnotation="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutTodoAnnotatedTests="true"
+    convertDeprecationsToExceptions="true"
+    failOnRisky="true"
+    failOnWarning="true"
     colors="true"
     verbose="true"
     testdox="true"
-    cacheResultFile=".var/cache/phpunit/phpunit.result.cache"
+    cacheResult="true"
 >
-<coverage 
-    processUncoveredFiles="true" 
-    cacheDirectory=".var/cache/phpunit"
->
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <coverage
+        cacheDirectory=".var/cache/phpunit/phpunit.cache/code-coverage"
+        processUncoveredFiles="true"
+    >
         <include>
             <directory suffix=".php">src</directory>
         </include>
@@ -22,8 +34,4 @@
             <text outputFile="php://stdout"/>
         </report>
     </coverage>
-    <testsuite name="main">
-        <directory>tests</directory>
-    </testsuite>
-    <logging/>
 </phpunit>
