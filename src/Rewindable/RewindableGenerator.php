@@ -7,20 +7,36 @@ namespace Jascha030\Iterable\Rewindable;
 use Closure;
 use Generator;
 use Iterator;
+use PhpOption\LazyOption;
+use PhpOption\Option;
+use Throwable;
 
 /**
- * @internal
+ * @implements Iterator<mixed, mixed>
  */
 final class RewindableGenerator implements Iterator
 {
     private Closure $func;
 
-    private ?Generator $generator;
+    private Generator $generator;
 
-    private function __construct(callable|Closure $fn, private array $args)
+    /**
+     * @param callable|Closure $fn
+     * @param mixed[]          $args
+     */
+    private function __construct(
+        callable|Closure       $fn,
+        private readonly array $args
+    )
     {
-        $this->func      = $fn;
-        $this->generator = null;
+        $this->func = $fn(...);
+    }
+
+    private function getGenerator(): Generator
+    {
+        return Option::fromValue($this->generator)
+                     ->orElse(new LazyOption($this->factory(...)))
+                     ->get();
     }
 
     public function rewind(): void
@@ -32,48 +48,43 @@ final class RewindableGenerator implements Iterator
 
     public function next(): void
     {
-        null !== $this->generator || $this->rewind();
-
-        $this->generator->next();
+        $this->getGenerator()->next();
     }
 
     public function valid(): bool
     {
-        null !== $this->generator || $this->rewind();
-
-        return $this->generator->valid();
+        return $this->getGenerator()->valid();
     }
 
     public function key(): mixed
     {
-        null !== $this->generator || $this->rewind();
-
-        return $this->generator->key();
+        return $this->getGenerator()->key();
     }
 
     public function current(): mixed
     {
-        null !== $this->generator || $this->rewind();
-
-        return $this->generator->current();
+        return $this->getGenerator()->current();
     }
 
-    public function send($value = null)
+    public function send(mixed $value = null): mixed
     {
-        null !== $this->generator || $this->rewind();
-
-        return $this->generator->send($value);
+        return $this->getGenerator()->send($value);
     }
 
-    public function throw($exception)
+    public function throw(Throwable $exception): mixed
     {
-        null !== $this->generator || $this->rewind();
+        return $this->getGenerator()->throw($exception);
+    }
 
-        return $this->generator->throw($exception);
+    private function factory(): Generator
+    {
+        $this->rewind();
+
+        return $this->generator;
     }
 
     public static function from(callable|Closure $generator): Closure
     {
-        return static fn(...$args) => new self($generator, $args);
+        return static fn (...$args) => new self($generator, $args);
     }
 }
