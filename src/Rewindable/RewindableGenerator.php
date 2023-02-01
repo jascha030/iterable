@@ -8,7 +8,9 @@ use Closure;
 use Generator;
 use Iterator;
 use PhpOption\LazyOption;
+use PhpOption\None;
 use PhpOption\Option;
+use PhpOption\Some;
 use Throwable;
 
 /**
@@ -18,7 +20,7 @@ final class RewindableGenerator implements Iterator
 {
     private Closure $func;
 
-    private Generator $generator;
+    private ?Generator $generator;
 
     /**
      * @param callable|Closure $fn
@@ -30,13 +32,8 @@ final class RewindableGenerator implements Iterator
     )
     {
         $this->func = $fn(...);
-    }
 
-    private function getGenerator(): Generator
-    {
-        return Option::fromValue($this->generator)
-                     ->orElse(new LazyOption($this->factory(...)))
-                     ->get();
+        $this->generator = null;
     }
 
     public function rewind(): void
@@ -48,32 +45,32 @@ final class RewindableGenerator implements Iterator
 
     public function next(): void
     {
-        $this->getGenerator()->next();
+        $this->getInner()->next();
     }
 
     public function valid(): bool
     {
-        return $this->getGenerator()->valid();
+        return $this->getInner()->valid();
     }
 
     public function key(): mixed
     {
-        return $this->getGenerator()->key();
+        return $this->getInner()->key();
     }
 
     public function current(): mixed
     {
-        return $this->getGenerator()->current();
+        return $this->getInner()->current();
     }
 
     public function send(mixed $value = null): mixed
     {
-        return $this->getGenerator()->send($value);
+        return $this->getInner()->send($value);
     }
 
     public function throw(Throwable $exception): mixed
     {
-        return $this->getGenerator()->throw($exception);
+        return $this->getInner()->throw($exception);
     }
 
     private function factory(): Generator
@@ -86,5 +83,22 @@ final class RewindableGenerator implements Iterator
     public static function from(callable|Closure $generator): Closure
     {
         return static fn (...$args) => new self($generator, $args);
+    }
+
+    /**
+     * @return Option<Generator|null>
+     */
+    private function getGenerator(): Option
+    {
+        if (null !== $this->generator) {
+            return new Some($this->generator);
+        }
+
+        return None::create();
+    }
+
+    private function getInner(): Generator
+    {
+        return $this->getGenerator()->getOrCall($this->factory(...));
     }
 }
