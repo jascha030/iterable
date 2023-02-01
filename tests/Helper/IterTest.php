@@ -23,7 +23,7 @@ final class IterTest extends TestCase
     public function testReduceWithKeyParameter(): void
     {
         $withKeys = Iter::reduce(
-            static fn(int $current, int $value, int $key): int => $current + $value + $key,
+            static fn (int $current, int $value, int $key): int => $current + $value + $key,
             [1, 2, 3],
             1
         );
@@ -42,7 +42,7 @@ final class IterTest extends TestCase
     public function testReduceWithoutKeyParameter(): void
     {
         $withKeys = Iter::reduce(
-            static fn(int $current, int $value): int => $current + $value,
+            static fn (int $current, int $value): int => $current + $value,
             [1, 2, 3],
             1
         );
@@ -63,7 +63,7 @@ final class IterTest extends TestCase
         };
 
         $map    = Iter::makeRewindable($map);
-        $mapped = $map(static fn(int $v) => $v + 1, [1, 2, 3]);
+        $mapped = $map(static fn (int $v) => $v + 1, [1, 2, 3]);
 
         [$first, $second] = [0, 0];
 

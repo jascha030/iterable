@@ -7,7 +7,6 @@ namespace Jascha030\Iterable\Rewindable;
 use Closure;
 use Generator;
 use Iterator;
-use PhpOption\LazyOption;
 use PhpOption\None;
 use PhpOption\Option;
 use PhpOption\Some;
@@ -23,14 +22,12 @@ final class RewindableGenerator implements Iterator
     private ?Generator $generator;
 
     /**
-     * @param callable|Closure $fn
-     * @param mixed[]          $args
+     * @param mixed[] $args
      */
     private function __construct(
-        callable|Closure       $fn,
+        callable|Closure $fn,
         private readonly array $args
-    )
-    {
+    ) {
         $this->func = $fn(...);
 
         $this->generator = null;
@@ -86,7 +83,7 @@ final class RewindableGenerator implements Iterator
     }
 
     /**
-     * @return Option<Generator|null>
+     * @return Option<null|Generator>
      */
     private function getGenerator(): Option
     {

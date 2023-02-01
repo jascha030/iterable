@@ -12,8 +12,8 @@ use function ob_get_clean;
 use function PHPUnit\Framework\assertEquals;
 
 /**
- * @covers \Jascha030\Iterable\Rewindable\RewindableGenerator
  * @covers \Jascha030\Iterable\Helper\Iter
+ * @covers \Jascha030\Iterable\Rewindable\RewindableGenerator
  *
  * @internal
  */
@@ -41,7 +41,7 @@ final class RewindableGeneratorTest extends TestCase
     public function testNext(): void
     {
         $iterable = $this->getIterator();
-        $curr = $iterable->current();
+        $curr     = $iterable->current();
         $iterable->next();
 
         self::assertNotEquals($curr, $iterable->current());
@@ -54,11 +54,11 @@ final class RewindableGeneratorTest extends TestCase
         $t1 = 0;
         $t2 = 0;
 
-        foreach($test as $i) {
+        foreach ($test as $i) {
             $t1 += $i;
         }
 
-        foreach($test as $i) {
+        foreach ($test as $i) {
             $t2 += $i;
         }
 
