@@ -42,7 +42,7 @@ final class Iter
     /**
      * @param callable|Closure $function
      *
-     * @return Closure<RewindableGenerator>
+     * @return Closure
      */
     public static function makeRewindable(callable|Closure $function): Closure
     {
